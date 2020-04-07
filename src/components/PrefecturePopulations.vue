@@ -25,7 +25,7 @@
       <b-spinner v-show="isPopulationDataLoading" />
     </div>
 
-    <HighChart :options="graphOptions" />
+    <HighChart :options="chartOptions" />
   </div>
 </template>
 
@@ -42,7 +42,7 @@ export default {
       prefectures: [],
       isPrefecturesLoading: false,
       isPopulationDataLoading: false,
-      graphOptions: {}
+      chartOptions: {}
     }
   },
   created () {
@@ -119,7 +119,7 @@ export default {
     },
     async handleSetPopulationData (prefectureCode) {
       await this.setPopulationData(prefectureCode, event.returnValue)
-      this.graphOptions = this.generateChartData(this.prefectures)
+      this.chartOptions = this.generateChartData(this.prefectures)
     }
   }
 }
