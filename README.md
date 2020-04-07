@@ -46,17 +46,15 @@ npm run lint
 ### カストマイズ
 [Configuration Reference](https://cli.vuejs.org/config/)を調べてください
 
-
 ## TODO:
 
-This is not a production-ready project. Some of the improvements I would make are below:
+This is not a production-ready project. If I were building this for a production site, some of the improvements I would make are below:
 
 * Use .env files to hold the RESAS API key
 * Either hardcode or cache prefecture information.
-* Cache API data. There is no caching of data. Each change triggers another API call.
+* Cache API in localstorage (currently caches in memory)
 * Add API error handling to Bootstrap Toasts.
 * Import only what is required from Bootstrap-Vue
-* Good-looking loading spinners
 * Split PrefecturePopulations into more components
 * Remove !important for styles
 * Standardize API handling to use try-catch with async-await
@@ -66,8 +64,3 @@ This is not a production-ready project. Some of the improvements I would make ar
 // This assumes that the frontend_wireframe.jpg image is the correct representation of the project's requirements, and that data from 1970 to 2020 will be displayed in 10 year intervals
 
 This assumes that the frontend_wireframe.jpg image is not the correct representation of the project's requirements, and that API data will need to be displayed as returned.
-
-
-## Difficulties
-
-API wasn't clear. Had to rewrite a lot.

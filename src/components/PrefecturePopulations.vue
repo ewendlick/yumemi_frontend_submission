@@ -8,12 +8,12 @@
           <b-spinner />
         </div>
         <b-row v-show="!isPrefecturesLoading && prefectures.length" class="ml-0 mr-0">
-          <b-col v-for="prefecture in prefectures" md="3" sm="4" cols="6" :key="prefecture.value">
+          <b-col v-for="prefecture in prefectures" md="3" sm="4" cols="6" :key="prefecture.code">
             <b-form-checkbox v-model="prefecture.isSelected"
                             :value="true"
                             :unchecked-value="false"
                             class="text-left prefecture-checkbox"
-                            @change="handleSetPopulationData">
+                            @change="handleSetPopulationData(prefecture.code)">
               {{ prefecture.name }}
             </b-form-checkbox>
           </b-col>
@@ -22,22 +22,19 @@
       </b-form-group>
     </b-form>
 
+    <!-- TODO: fixed height -->
     <div v-show="isPopulationDataLoading" class="text-center">
       <b-spinner />
     </div>
-    <!--<div v-show="!isPopulationDataLoading && populationData.length">
-      {{ populationData }}
-    </div>-->
 
-    <!-- TODO: move HighChart? Hide when data is empty? -->
     <HighChart :options="graphOptions" />
   </div>
 </template>
 
 <script>
-// const START_YEAR = 1970
-// const END_YEAR = 2020
-// const YEAR_INTERVAL = 10 // Must be multiples of 5
+const START_YEAR = 1970
+const END_YEAR = 2020
+const YEAR_INTERVAL = 5 // Must be multiples of 5
 const POPULATION_DATA_DEFAULT_OPTIONS = {
   title: {
     text: null,
@@ -45,12 +42,6 @@ const POPULATION_DATA_DEFAULT_OPTIONS = {
       display: 'none'
     }
   },
-  /*
-  subtitle: {
-    text: 'Source: thesolarfoundation.com'
-  },
-  */
-
   yAxis: {
     title: {
       text: '人口数'
@@ -71,8 +62,8 @@ const POPULATION_DATA_DEFAULT_OPTIONS = {
       label: {
         connectorAllowed: false
       },
-      pointStart: 1960, // TODO: match the frontend_wireframe.jpg or the API content?
-      pointInterval: 5 // years
+      pointStart: START_YEAR, // TODO: match the frontend_wireframe.jpg or the API content?
+      pointInterval: YEAR_INTERVAL
     }
   },
   colors: ['#90b44b', '#33a6b8', '#0b132b', '#3c2541', '#dfc2f2', '#aF2bbf', '#a14ebf', '#6c91bf', '#ef3e36', '#2e282a', '#fff689'],
@@ -101,19 +92,13 @@ export default {
       prefectures: [],
       isPrefecturesLoading: false,
       isPopulationDataLoading: false,
-      graphOptions: {
-      }
-    }
-  },
-  computed: {
-    selectedPrefectures () {
-      return this.prefectures.filter(prefecture => prefecture.isSelected).map(prefecture => prefecture.value)
+      graphOptions: {}
     }
   },
   created () {
     this.setPrefectures()
     if (this.prefectures.length) {
-
+      // TODO: handle scenario where there are not any prefectures or API call fails
     }
     // TODO: else, error message
   },
@@ -138,27 +123,22 @@ export default {
         this.prefectures = apiPayload.data.result.map(prefecture => {
           return {
             name: prefecture.prefName,
-            value: prefecture.prefCode, // TODO: Change this to "code", since we aren't feeding this into Bootstrap checkboxes
-            isSelected: false
+            code: prefecture.prefCode,
+            isSelected: false,
+            populationData: null
           }
         })
       }
-      // TODO: else, check if prefectures are the right format, otherwise throw error
-
       this.isPrefecturesLoading = false
     },
-    getPopulationData (prefectureCodes) {
-      console.log('inside prefectureCodes', prefectureCodes)
-      if (prefectureCodes.length === 0) return []
+    getPopulationData (prefectureCode) {
+      const targetPrefecture = this.prefectures.find(prefecture => prefecture.code === prefectureCode)
+      if (targetPrefecture.populationData !== null) {
+        return targetPrefecture.populationData
+      }
 
-      const primaryPrefectureCode = prefectureCodes[0]
-      const additionalPrefectureCodes = prefectureCodes.slice(1).map(prefectureCode => {
-        return `${prefectureCode}_`
-      }).join(',')
-
-      prefectureCodes = prefectureCodes.join(',')
       // TODO: switch this to the try catch format with await?
-      return this.$resas.get(`api/v1/population/composition/perYear?prefCode=${primaryPrefectureCode}&cityCode=-&addArea=${additionalPrefectureCodes}`)
+      const payload = this.$resas.get(`api/v1/population/composition/perYear?prefCode=${prefectureCode}&cityCode=-`)
         .then((response) => {
           return response
         })
@@ -166,66 +146,47 @@ export default {
           // TODO: Error-handling system
           alert(e)
         })
+      return payload
     },
-    async setPopulationData (prefectureCodes) {
+    async setPopulationData (prefectureCode, value) {
       this.isPopulationDataLoading = true
-      const apiPayload = await this.getPopulationData(prefectureCodes)
-      // TODO: not DRY. Error handling system
-      if (apiPayload.data.result) {
-        console.log('payload', apiPayload)
-        const populationData = apiPayload.data.result.data.filter(populationSegment => {
-          return populationSegment.label === '総人口'
-        })[0].data
 
-        console.log(populationData)
-        // console.log(END_YEAR)
+      // Only need to perform this step if checkbox is checked
+      if (value) {
+        const apiPayload = await this.getPopulationData(prefectureCode)
 
-        const graphOptions = POPULATION_DATA_DEFAULT_OPTIONS
-        graphOptions.series = [
+        // TODO: not DRY. Error handling system
+        if (apiPayload.data && apiPayload.data.result) {
+          console.log('payload', apiPayload.data.result.data)
+          const populationData = apiPayload.data.result.data.filter(populationSegment => {
+            return populationSegment.label === '総人口'
+          })[0].data
 
-        ]
-
-        graphOptions.series = [
-          {
-            name: 'Installation', // TODO: switch to name of prefecture
-            data: [43934, 52503, 57177, 69658, 97031, 119931, 137133, 154175]
-          }, {
-            name: 'Manufacturing',
-            data: [24916, 24064, 29742, 29851, 32490, 30282, 38121, 40434]
-          }, {
-            name: 'Sales & Distribution',
-            data: [11744, 17722, 16005, 19771, 20185, 24377, 32147, 39387]
-          }, {
-            name: 'Project Development',
-            data: [null, null, 7988, 12169, 15112, 22452, 34400, 34227]
-          }, {
-            name: 'Other',
-            data: [12908, 5948, 8105, 11248, 8989, 11816, 18274, 18111]
-          }
-        ]
-
-        this.graphOptions = graphOptions
-      } else {
-        this.graphOptions = POPULATION_DATA_DEFAULT_OPTIONS
+          this.prefectures[this.prefectures.findIndex(prefecture => prefecture.code === prefectureCode)].populationData = populationData
+        }
       }
+
       this.isPopulationDataLoading = false
     },
-    handleSetPopulationData () {
-      // TODO: consider a watcher instead of the @change event
-      this.$nextTick(function () {
-        console.log('ABC')
-        if (this.selectedPrefectures.length) {
-          console.log('HEY')
-          this.setPopulationData(this.selectedPrefectures)
-        } else {
-          this.graphOptions = POPULATION_DATA_DEFAULT_OPTIONS
-        }
-      })
+    async handleSetPopulationData (prefectureCode) {
+      await this.setPopulationData(prefectureCode, event.returnValue)
+      this.generateChartData()
     },
-    prefectureCodeToName (prefectureCode, prefectures) {
-      return prefectures.find(prefecture => {
-        return prefecture.value === prefectureCode
-      })
+    generateChartData () {
+      const graphOptions = POPULATION_DATA_DEFAULT_OPTIONS
+
+      graphOptions.series = this.prefectures.filter(prefecture => prefecture.isSelected)
+        .map(prefecture => {
+          const builtPopulationData = prefecture.populationData.filter(populationDataSegment => {
+            return populationDataSegment.year >= START_YEAR && populationDataSegment.year <= END_YEAR
+          }).map(populationDataSegment => populationDataSegment.value)
+
+          return {
+            name: prefecture.name,
+            data: builtPopulationData
+          }
+        })
+      this.graphOptions = graphOptions
     }
   }
 }
