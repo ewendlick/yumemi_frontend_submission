@@ -28,7 +28,7 @@ const POPULATION_DATA_DEFAULT_OPTIONS = {
       label: {
         connectorAllowed: false
       },
-      pointStart: START_YEAR, // TODO: match the frontend_wireframe.jpg or the API content?
+      pointStart: START_YEAR,
       pointInterval: YEAR_INTERVAL
     }
   },
@@ -46,6 +46,9 @@ const POPULATION_DATA_DEFAULT_OPTIONS = {
         }
       }
     }]
+  },
+  credits: {
+    enabled: false
   }
 }
 

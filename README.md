@@ -52,15 +52,12 @@ This is not a production-ready project. If I were building this for a production
 
 * Use .env files to hold the RESAS API key
 * Either hardcode or cache prefecture information.
-* Cache API in localstorage (currently caches in memory)
-* Add API error handling to Bootstrap Toasts.
+* Cache API results for populration information in localstorage (currently caches in memory)
+* Add API error handling and display via Bootstrap Toasts
 * Import only what is required from Bootstrap-Vue
 * Split PrefecturePopulations into more components
 * Remove !important for styles
-* Standardize API handling to use try-catch with async-await
 
 ## Assumptions
 
-// This assumes that the frontend_wireframe.jpg image is the correct representation of the project's requirements, and that data from 1970 to 2020 will be displayed in 10 year intervals
-
-This assumes that the frontend_wireframe.jpg image is not the correct representation of the project's requirements, and that API data will need to be displayed as returned.
+Based on frontend_wireframe.jpg, it is assumed that only years 1970 to 2020 will be displayed.
