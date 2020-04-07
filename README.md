@@ -31,6 +31,8 @@ npm install
 npm run serve
 ```
 
+NOTE: このプロジェクトはグローバルのvue-cliとvue-cli-serviceを使う。上記のコマンドが失敗したらいvue-cli-serviceをインストールしてください。(`npm install -g vue-cli vue-cli-service`)
+
 ### 本番環境をデプロイするためのコンパイルと縮小
 ```
 npm run build
@@ -43,3 +45,13 @@ npm run lint
 
 ### カストマイズ
 [Configuration Reference](https://cli.vuejs.org/config/)を調べてください
+
+
+## TODO:
+
+This is not a production-ready project. Some of the improvements I would make are below:
+
+* Use .env files to hold the RESAS API key
+* Either hardcode or cache prefecture information.
+* Cache API data. There is no caching of data. Each change triggers another API call.
+* Add API error handling to Bootstrap Toasts.
