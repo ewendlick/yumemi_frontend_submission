@@ -18,13 +18,11 @@
             </b-form-checkbox>
           </b-col>
         </b-row>
-
       </b-form-group>
     </b-form>
 
-    <!-- TODO: fixed height -->
-    <div v-show="isPopulationDataLoading" class="text-center">
-      <b-spinner />
+    <div id="population-data-spinner-container" class="text-center">
+      <b-spinner v-show="isPopulationDataLoading" />
     </div>
 
     <HighChart :options="graphOptions" />
@@ -56,7 +54,6 @@ export default {
   },
   methods: {
     getPrefectures () {
-      // TODO: switch this to the try catch format with await?
       return this.$resas.get('api/v1/prefectures')
         .then((response) => {
           return response
@@ -133,6 +130,10 @@ export default {
     background-color: #fff;
     color: #2c3e50;
     padding: 2rem;
+  }
+
+  #population-data-spinner-container {
+    height: 40px;
   }
 </style>
 
