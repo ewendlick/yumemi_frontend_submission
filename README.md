@@ -66,3 +66,8 @@ This is not a production-ready project. Some of the improvements I would make ar
 // This assumes that the frontend_wireframe.jpg image is the correct representation of the project's requirements, and that data from 1970 to 2020 will be displayed in 10 year intervals
 
 This assumes that the frontend_wireframe.jpg image is not the correct representation of the project's requirements, and that API data will need to be displayed as returned.
+
+
+## Difficulties
+
+API wasn't clear. Had to rewrite a lot.
