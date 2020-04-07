@@ -3,8 +3,7 @@
     <b-form>
       <b-form-group id="prefectures"
                     label="都道府県"
-                    label-align="left"
-                    :description="isPrefectureLimitReached ? `${POPULATION_DATA_PREFECTURE_LIMIT}都道府県限定` : ''">
+                    label-align="left">
         <div v-show="isPrefecturesLoading" class="text-center">
           <b-spinner />
         </div>
@@ -14,7 +13,6 @@
                             :value="true"
                             :unchecked-value="false"
                             class="text-left prefecture-checkbox"
-                            :disabled="!prefecture.isSelected && isPrefectureLimitReached"
                             @change="handleSetPopulationData">
               {{ prefecture.name }}
             </b-form-checkbox>
@@ -37,7 +35,6 @@
 </template>
 
 <script>
-const POPULATION_DATA_PREFECTURE_LIMIT = 11 // RESAS response returns 400 when request contains more than 11 prefectures
 // const START_YEAR = 1970
 // const END_YEAR = 2020
 // const YEAR_INTERVAL = 10 // Must be multiples of 5
@@ -109,18 +106,11 @@ export default {
     }
   },
   computed: {
-    isPrefectureLimitReached () {
-      // TODO: get the length of selectedPrefectures here
-      return this.prefectures.reduce((acc, prefecture) => {
-        return acc + (prefecture.isSelected ? 1 : 0)
-      }, 0) >= POPULATION_DATA_PREFECTURE_LIMIT
-    },
     selectedPrefectures () {
       return this.prefectures.filter(prefecture => prefecture.isSelected).map(prefecture => prefecture.value)
     }
   },
   created () {
-    this.POPULATION_DATA_PREFECTURE_LIMIT = POPULATION_DATA_PREFECTURE_LIMIT
     this.setPrefectures()
     if (this.prefectures.length) {
 
