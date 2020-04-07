@@ -1,7 +1,17 @@
 <template>
   <div>
     TODO: label<br>
-    TODO: responsive checkboxes<br>
+    <b-row v-if="prefectures.length">
+      <b-col v-for="prefecture in prefectures" cols="3" :key="prefecture.value">
+        <b-form-checkbox v-model="prefecture.selected" :value="true" :unchecked-value="false" class="text-left">
+          {{ prefecture.name }}
+        </b-form-checkbox>
+      </b-col>
+    </b-row>
+    <div v-else>
+      Loading...
+    </div>
+
     {{ prefectures }}<br>
     TODO: responsive graph via Highcharts<br>
     {{ populationData }}
@@ -18,6 +28,7 @@ export default {
   data () {
     return {
       prefectures: [],
+      // selectedPrefectures: [],
       populationData: []
     }
   },
@@ -31,6 +42,7 @@ export default {
 
     // TODO: end loading spinner
   },
+  // TODO: watcher to prevent more than 11 prefectures from being chosen. Display an error message if 11 are chosen
   methods: {
     getPrefectures () {
       return this.$resas.get('api/v1/prefectures')
@@ -50,7 +62,8 @@ export default {
         this.prefectures = apiPayload.data.result.map(prefecture => {
           return {
             name: prefecture.prefName,
-            value: prefecture.prefCode
+            value: prefecture.prefCode,
+            selected: false
           }
         })
       }

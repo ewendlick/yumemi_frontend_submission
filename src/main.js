@@ -2,8 +2,16 @@ import Vue from 'vue'
 import App from './App.vue'
 import axios from 'axios'
 import VueAxios from 'vue-axios'
+// TODO: Only import what is required
+import { BootstrapVue } from 'bootstrap-vue' // IconsPlugiun
+
+import 'bootstrap/dist/css/bootstrap.css'
+import 'bootstrap-vue/dist/bootstrap-vue.css'
 
 Vue.use(VueAxios, axios)
+Vue.use(BootstrapVue)
+// Optional: BootstrapVue icon components plugin
+// Vue.use(IconsPlugin)
 
 Vue.config.productionTip = false
 
