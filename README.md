@@ -56,3 +56,6 @@ This is not a production-ready project. Some of the improvements I would make ar
 * Cache API data. There is no caching of data. Each change triggers another API call.
 * Add API error handling to Bootstrap Toasts.
 * Import only what is required from Bootstrap-Vue
+* Good-looking loading spinners
+* Split PrefecturePopulations into more components
+* Remove !important for styles
