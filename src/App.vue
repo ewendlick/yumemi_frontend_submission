@@ -37,8 +37,8 @@ export default {
 
 .background {
   background: linear-gradient(to right bottom, #90b44b, #33a6b8);
-  background-image: url(/bg-texture.png);
-  background-image: url(/bg-texture.png), linear-gradient(to right bottom, #90b44b, #33a6b8);
+  background-image: url(~@/assets/bg-texture.png);
+  background-image: url(~@/assets/bg-texture.png), linear-gradient(to right bottom, #90b44b, #33a6b8);
   height: 100%;
 }
 </style>
