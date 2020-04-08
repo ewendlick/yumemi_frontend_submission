@@ -1,6 +1,8 @@
 # yumemi_frontend_submission
 
-ゆめみようなフロントエンド送信です。
+ゆめみようなフロントエンド用です。
+
+![Screenshot](screenshot.png)
 
 ## プロジェクト詳細
 
@@ -26,12 +28,12 @@
 npm install
 ```
 
-### 開発するためのコンパイルとホットリーロド
+### 開発するためのコンパイルとホットリロード
 ```
 npm run serve
 ```
 
-NOTE: このプロジェクトはグローバルのvue-cliとvue-cli-serviceを使う。上記のコマンドが失敗したらいvue-cli-serviceをインストールしてください。(`npm install -g vue-cli vue-cli-service`)
+NOTE: このプロジェクトはグローバルのvue-cliとvue-cli-serviceを使う。上記のコマンドが失敗したらvue-cli-serviceをインストールしてください。(`npm install -g vue-cli vue-cli-service`)
 
 ### 本番環境をデプロイするためのコンパイルと縮小
 ```
@@ -46,18 +48,32 @@ npm run lint
 ### カストマイズ
 [Configuration Reference](https://cli.vuejs.org/config/)を調べてください
 
-## TODO:
+## TODO (EN)
 
 This is not a production-ready project. If I were building this for a production site, some of the improvements I would make are below:
 
 * Use .env files to hold the RESAS API key
 * Either hardcode or cache prefecture information.
-* Cache API results for populration information in localstorage (currently caches in memory)
+* Cache API results for population information in localstorage (currently caches in memory)
 * Add API error handling and display via Bootstrap Toasts
-* Import only what is required from Bootstrap-Vue
+* Import only what is required from Bootstrap-Vue (Tree-shaking happens when building for production)
 * Split PrefecturePopulations into more components
-* Remove !important for styles
+* Remove !important in CSS, import Bootstrap styles then overwrite them
+
+## TODO (JA)
+
+このコードは本番環境のためのコードではございません。本番環境にリリースするために下記の修正をします。
+
+* RESAS APIキーのために.envファイルを追加します。
+* 都道府県の情報をハードコードかキャシューします。
+* API応答の人口について情報をローカルストレージにキャシューします。 (現状はメモリーにキャシューしています)
+* エラー処理とAPIエラー発生時用にBootstrapトーストを追加します。
+* Bootstrap-Vueから必要な部分のみインポートします。　（本番環境のためにtree shakingの機能もあります)
+* PrefecturePopulationsのコンポーネントをさらに分けます。
+* CSSの「!important」を消します。消すためにはBootstrapのスタイルをインポートしてそこから上書きします。
 
 ## Assumptions
 
-Based on frontend_wireframe.jpg, it is assumed that only years 1970 to 2020 will be displayed.
+Based on frontend_wireframe.jpg (shown above in this README.md), it is assumed that only years 1970 to 2020 will be displayed.
+
+frontend_wireframe.jpg (上記に表示されているイメージ)によって、1970年から2020年までの人口情報を表示することを想定しています。

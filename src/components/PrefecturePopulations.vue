@@ -1,7 +1,7 @@
 <template>
   <div id="prefecture-populations">
     <header>
-      <h2 class="text-center">日本人口</h2>
+      <h2 class="text-center">日本の人口</h2>
     </header>
     <section>
       <b-form>
